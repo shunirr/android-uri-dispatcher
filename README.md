@@ -3,7 +3,7 @@
 作りかけ、以下のようなことが出来る予定。
 
 ```java
-Override
+@Override
 protected void onNewIntent(final Intent intent) {
     super.onNewIntent(intent);
     SchemeTest.handle(this, intent);
