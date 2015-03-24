@@ -22,24 +22,28 @@ public class MainActivity extends ActionBarActivity {
         SchemeTest.handle(this, intent);
     }
 
+    private void showToast(String str) {
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+    }
+
     @SchemeUrl("schemetest://host")
     void handleSchemeHost() {
-        Toast.makeText(this, "Handle schemetest://host", Toast.LENGTH_SHORT).show();
+        showToast("Handle schemetest://host");
     }
 
     @SchemeUrl("//host")
     void handleHost() {
-        Toast.makeText(this, "Handle //host", Toast.LENGTH_SHORT).show();
+        showToast("Handle //host");
     }
 
     @SchemeUrl("//host/")
     void handleRootPath() {
-        Toast.makeText(this, "Handle //host/", Toast.LENGTH_SHORT).show();
+        showToast("Handle //host/");
     }
 
     @SchemeUrl("//host/path")
     void handlePath() {
-        Toast.makeText(this, "Handle //host/path", Toast.LENGTH_SHORT).show();
+        showToast("Handle //host/path");
     }
 
     @SchemeUrl("//host/path?query={query}")
@@ -47,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         if (query == null) {
             return;
         }
-        Toast.makeText(this, "Handle //host/path?query=string", Toast.LENGTH_SHORT).show();
+        showToast("Handle //host/path?query=" + query);
     }
 
     @SchemeUrl("//host/path?id={id}")
@@ -55,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
         if (id < 0) {
             return;
         }
-        Toast.makeText(this, "Handle //host/path?id=integer", Toast.LENGTH_SHORT).show();
+        showToast("Handle //host/path?id=" + id);
     }
 
     @SchemeUrl("//host/path?query={query}&id={id}")
@@ -64,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
         if (query == null || id < 0) {
             return;
         }
-        Toast.makeText(this, "Handle //host/path?query=query&id=integer", Toast.LENGTH_SHORT).show();
+        showToast("Handle //host/path?query=" + query + "&id=" + id);
     }
 
     @SchemeUrl("//host/path/{id}")
@@ -72,11 +76,16 @@ public class MainActivity extends ActionBarActivity {
         if (id < 0) {
             return;
         }
-        Toast.makeText(this, "Handle //host/path/{id}", Toast.LENGTH_SHORT).show();
+        showToast("Handle //host/path/" + id);
     }
 
     @SchemeUrl("//host/path/wild/*")
     void handlePathWildCard() {
-        Toast.makeText(this, "Handle //host/path/wild/*", Toast.LENGTH_SHORT).show();
+        showToast("Handle //host/path/wild/*");
+    }
+
+    @SchemeUrl("/path")
+    void handleWithoutHost() {
+        showToast("Handle /path");
     }
 }

@@ -34,7 +34,7 @@ public class SchemeHandler {
 
             for (String paramPair : paramPairArray) {
                 String[] kv = paramPair.split("=");
-                result.put(kv[0], kv[1]);
+                result.put(kv[0], kv[1].substring(1, kv[1].length() - 1));
             }
         } else {
             mPatternPath = pattern;
@@ -47,6 +47,8 @@ public class SchemeHandler {
         String uriStr;
         if (mPattern.startsWith("//")) {
             uriStr = "//" + mUri.getHost() + mUri.getPath();
+        } else if (mPattern.startsWith("/")) {
+            uriStr = mUri.getPath();
         } else {
             uriStr = mUri.getScheme() + "://" + mUri.getHost() + mUri.getPath();
         }
@@ -55,7 +57,7 @@ public class SchemeHandler {
             return uriStr.equals(mPatternPath);
         } else {
             for (String name : mUri.getQueryParameterNames()) {
-                if (!mPatternParams.containsKey(name)) {
+                if (!mPatternParams.containsValue(name)) {
                     return false;
                 }
             }

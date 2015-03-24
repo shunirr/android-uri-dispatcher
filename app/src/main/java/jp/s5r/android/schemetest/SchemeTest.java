@@ -33,16 +33,13 @@ public final class SchemeTest {
                         SchemeUrl schemeUrl = (SchemeUrl) annotation;
                         SchemeHandler handler = new SchemeHandler(schemeUrl.value(), uri, params);
                         if (handler.isMatch()) {
-                            Object[] methodParams = getParams(method, handler);
-                            if (method.getParameterTypes().length == methodParams.length) {
-                                Log.d("SchemeTest", schemeUrl.value());
-                                method.invoke(target, methodParams);
-                            }
+                            Log.d("SchemeTest", "invoke: " + schemeUrl.value());
+                            method.invoke(target, getParams(method, handler));
                         }
                     }
                 }
-            } catch (Exception e) {
-                Log.e("SchemeTest", e.toString());
+            } catch (IllegalArgumentException | SecurityException | ReflectiveOperationException e) {
+                throw new RuntimeException(e);
             }
         }
     }
