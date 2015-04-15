@@ -1,10 +1,11 @@
-package jp.s5r.android.schemetest;
+package jp.s5r.android.schemetest.sample;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import jp.s5r.android.schemetest.SchemeTest;
 import jp.s5r.android.schemetest.annotation.SchemeParam;
 import jp.s5r.android.schemetest.annotation.SchemeUrl;
 
@@ -13,7 +14,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(jp.s5r.android.schemetest.R.layout.activity_main);
     }
 
     @Override
@@ -27,27 +28,27 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @SchemeUrl("schemetest://host")
-    void handleSchemeHost() {
+    public void handleSchemeHost() {
         showToast("Handle schemetest://host");
     }
 
     @SchemeUrl("//host")
-    void handleHost() {
+    public void handleHost() {
         showToast("Handle //host");
     }
 
     @SchemeUrl("//host/")
-    void handleRootPath() {
+    public void handleRootPath() {
         showToast("Handle //host/");
     }
 
     @SchemeUrl("//host/path")
-    void handlePath() {
+    public void handlePath() {
         showToast("Handle //host/path");
     }
 
     @SchemeUrl("//host/path?query={query}")
-    void handleStringQueryParam(@SchemeParam("query") String query) {
+    public void handleStringQueryParam(@SchemeParam("query") String query) {
         if (query == null) {
             return;
         }
@@ -55,7 +56,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @SchemeUrl("//host/path?id={id}")
-    void handleIntegerQueryParam(@SchemeParam("id") int id) {
+    public void handleIntegerQueryParam(@SchemeParam("id") int id) {
         if (id < 0) {
             return;
         }
@@ -63,8 +64,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @SchemeUrl("//host/path?query={query}&id={id}")
-    void handleMultiQueryParam(@SchemeParam("query") String query,
-                               @SchemeParam("id") int id) {
+    public void handleMultiQueryParam(@SchemeParam("query") String query,
+                                      @SchemeParam("id") int id) {
         if (query == null || id < 0) {
             return;
         }
@@ -72,7 +73,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @SchemeUrl("//host/path/{id}")
-    void handlePathParam(@SchemeParam("id") int id) {
+    public void handlePathParam(@SchemeParam("id") int id) {
         if (id < 0) {
             return;
         }
@@ -80,12 +81,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @SchemeUrl("//host/path/wild/*")
-    void handlePathWildCard() {
+    public void handlePathWildCard() {
         showToast("Handle //host/path/wild/*");
     }
 
     @SchemeUrl("/path")
-    void handleWithoutHost() {
+    public void handleWithoutHost() {
         showToast("Handle /path");
     }
 }
