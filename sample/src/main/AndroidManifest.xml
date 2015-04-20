@@ -20,7 +20,8 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="schemetest" android:host="*" />
+        <data android:scheme="scheme-test" android:host="*" />
+        <data android:scheme="http" android:host="scheme-test.example.com" />
       </intent-filter>
     </activity>
   </application>

@@ -27,9 +27,9 @@ public class MainActivity extends ActionBarActivity {
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
-    @SchemeUrl("schemetest://host")
+    @SchemeUrl("scheme-test://host")
     public void handleSchemeHost() {
-        showToast("Handle schemetest://host");
+        showToast("Handle scheme-test://host");
     }
 
     @SchemeUrl("//host")
@@ -88,5 +88,10 @@ public class MainActivity extends ActionBarActivity {
     @SchemeUrl("/path")
     public void handleWithoutHost() {
         showToast("Handle /path");
+    }
+
+    @SchemeUrl("http://scheme-test.example.com/path")
+    public void handleHttpUrl() {
+        showToast("Handle http://scheme-test.example.com/path");
     }
 }
