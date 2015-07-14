@@ -29,33 +29,38 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @SchemeUrl("scheme-test://host")
-    public void handleSchemeHost() {
+    public void handleUrl() {
         showToast("Handle scheme-test://host");
     }
 
     @SchemeUrl("//host")
-    public void handleHost() {
+    public void handleHostWithoutSlash() {
         showToast("Handle //host");
     }
 
     @SchemeUrl("//host/")
-    public void handleRootPath() {
+    public void handleHostWithSlash() {
         showToast("Handle //host/");
     }
 
-    @SchemeUrl("//host/foo")
-    public void handlePath() {
-        showToast("Handle //host/foo");
+    @SchemeUrl("//host/user-list")
+    public void handleUserList() {
+        showToast("Handle //host/user-list");
     }
 
-    @SchemeUrl("//host/bar")
-    public void handleMultiQueryParam(@SchemeParam("query") String query,
+    @SchemeUrl("//host/search")
+    public void handleSearchWithQuery(@SchemeParam("query") String query,
                                       @SchemeParam("id") int id) {
-        showToast("Handle //host/bar?query=" + query + "&id=" + id);
+        showToast("Handle //host/search?query=" + query + "&id=" + id);
     }
 
-    @SchemeUrl("//host/buz/{id}")
-    public void handlePathParam(@SchemePath("id") int id) {
-        showToast("Handle //host/buz/" + id);
+    @SchemeUrl("//host/users/{id}")
+    public void handleUserWithId(@SchemePath("id") int id) {
+        showToast("Handle //host/users/" + id);
+    }
+
+    @SchemeUrl("//host/users/{id}/follower")
+    public void handleFollowerWithUserId(@SchemePath("id") int id) {
+        showToast("Handle //host/users/" + id + "/follower");
     }
 }

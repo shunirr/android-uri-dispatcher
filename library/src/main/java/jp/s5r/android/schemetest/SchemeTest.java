@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.s5r.android.schemetest.annotation.SchemeParam;
+import jp.s5r.android.schemetest.annotation.SchemePath;
 import jp.s5r.android.schemetest.annotation.SchemeUrl;
 
 public final class SchemeTest {
@@ -33,8 +34,11 @@ public final class SchemeTest {
                     }
 
                     List<SchemeParam> schemeParams = getSchemeParams(method);
+                    List<SchemePath> schemePaths = getSchemePaths(method);
+
                     SchemeUrl schemeUrl = (SchemeUrl) annotation;
-                    SchemeHandler handler = new SchemeHandler(schemeUrl.value(), schemeParams, uri, params);
+                    SchemeHandler handler = new SchemeHandler(
+                            schemeUrl.value(), schemeParams, schemePaths, uri, params);
                     if (handler.isMatch()) {
                         Log.d("SchemeTest", "invoke: " + schemeUrl.value());
                         method.invoke(target, buildParams(method, handler));
@@ -63,6 +67,25 @@ public final class SchemeTest {
                 }
             } catch (IllegalArgumentException | SecurityException e) {
                 throw new RuntimeException(e);
+            }
+        }
+
+        return result;
+    }
+
+    private static List<SchemePath> getSchemePaths(Method method) {
+        ArrayList<SchemePath> result = new ArrayList<>();
+
+        Annotation[][] paramAnnotations = method.getParameterAnnotations();
+        Class[] paramTypes = method.getParameterTypes();
+        if (paramTypes.length == 0) {
+            return result;
+        }
+        for (Annotation[] annotations : paramAnnotations) {
+            for (Annotation annotation : annotations) {
+                if (annotation.annotationType().equals(SchemePath.class)) {
+                    result.add((SchemePath) annotation);
+                }
             }
         }
 
@@ -109,6 +132,16 @@ public final class SchemeTest {
                         objectArrayList.add(value);
                     } else if (paramType.equals(int.class) || paramType.equals(Integer.class)) {
                         Integer value = handler.getParamInteger(key);
+                        objectArrayList.add(value);
+                    }
+                } else if (annotation.annotationType().equals(SchemePath.class)) {
+                    SchemePath schemePath = (SchemePath) annotation;
+                    String key = schemePath.value();
+                    if (paramType.equals(String.class)) {
+                        String value = handler.getPathString(key);
+                        objectArrayList.add(value);
+                    } else if (paramType.equals(int.class) || paramType.equals(Integer.class)) {
+                        Integer value = handler.getPathInteger(key);
                         objectArrayList.add(value);
                     }
                 }
