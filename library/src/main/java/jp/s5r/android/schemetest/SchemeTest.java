@@ -8,6 +8,7 @@ import android.util.Log;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.s5r.android.schemetest.annotation.SchemeParam;
 import jp.s5r.android.schemetest.annotation.SchemeUrl;
@@ -23,6 +24,30 @@ public final class SchemeTest {
     }
 
     private static void handle(Object target, Uri uri, Bundle params) {
+        for (Method method : getMethodAssignedSchemeUrl(target)) {
+            try {
+                Annotation[] annotations = method.getDeclaredAnnotations();
+                for (Annotation annotation : annotations) {
+                    if (!annotation.annotationType().equals(SchemeUrl.class)) {
+                        continue;
+                    }
+
+                    SchemeUrl schemeUrl = (SchemeUrl) annotation;
+                    SchemeHandler handler = new SchemeHandler(schemeUrl.value(), uri, params);
+                    if (handler.isMatch()) {
+                        Log.d("SchemeTest", "invoke: " + schemeUrl.value());
+                        method.invoke(target, getParams(method, handler));
+                    }
+                }
+            } catch (IllegalArgumentException | SecurityException | ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private static List<Method> getMethodAssignedSchemeUrl(Object target) {
+        ArrayList<Method> result = new ArrayList<>();
+
         Class clazz = target.getClass();
         Method[] methods = clazz.getDeclaredMethods();
         for (Method method : methods) {
@@ -30,18 +55,17 @@ public final class SchemeTest {
                 Annotation[] annotations = method.getDeclaredAnnotations();
                 for (Annotation annotation : annotations) {
                     if (annotation.annotationType().equals(SchemeUrl.class)) {
-                        SchemeUrl schemeUrl = (SchemeUrl) annotation;
-                        SchemeHandler handler = new SchemeHandler(schemeUrl.value(), uri, params);
-                        if (handler.isMatch()) {
-                            Log.d("SchemeTest", "invoke: " + schemeUrl.value());
-                            method.invoke(target, getParams(method, handler));
-                        }
+                        // target で SchemeUrl が指定されているメソッド一覧
+                        result.add(method);
+                        break;
                     }
                 }
-            } catch (IllegalArgumentException | SecurityException | ReflectiveOperationException e) {
+            } catch (IllegalArgumentException | SecurityException e) {
                 throw new RuntimeException(e);
             }
         }
+
+        return result;
     }
 
     private static Object[] getParams(Method method, SchemeHandler handler) {
