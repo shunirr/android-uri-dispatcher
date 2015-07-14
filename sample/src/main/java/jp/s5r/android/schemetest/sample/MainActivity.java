@@ -1,12 +1,13 @@
 package jp.s5r.android.schemetest.sample;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
 import jp.s5r.android.schemetest.SchemeTest;
 import jp.s5r.android.schemetest.annotation.SchemeParam;
+import jp.s5r.android.schemetest.annotation.SchemePath;
 import jp.s5r.android.schemetest.annotation.SchemeUrl;
 
 public class MainActivity extends ActionBarActivity {
@@ -42,56 +43,19 @@ public class MainActivity extends ActionBarActivity {
         showToast("Handle //host/");
     }
 
-    @SchemeUrl("//host/path")
+    @SchemeUrl("//host/foo")
     public void handlePath() {
-        showToast("Handle //host/path");
+        showToast("Handle //host/foo");
     }
 
-    @SchemeUrl("//host/path?query={query}")
-    public void handleStringQueryParam(@SchemeParam("query") String query) {
-        if (query == null) {
-            return;
-        }
-        showToast("Handle //host/path?query=" + query);
-    }
-
-    @SchemeUrl("//host/path?id={id}")
-    public void handleIntegerQueryParam(@SchemeParam("id") int id) {
-        if (id < 0) {
-            return;
-        }
-        showToast("Handle //host/path?id=" + id);
-    }
-
-    @SchemeUrl("//host/path?query={query}&id={id}")
+    @SchemeUrl("//host/bar")
     public void handleMultiQueryParam(@SchemeParam("query") String query,
                                       @SchemeParam("id") int id) {
-        if (query == null || id < 0) {
-            return;
-        }
-        showToast("Handle //host/path?query=" + query + "&id=" + id);
+        showToast("Handle //host/bar?query=" + query + "&id=" + id);
     }
 
-    @SchemeUrl("//host/path/{id}")
-    public void handlePathParam(@SchemeParam("id") int id) {
-        if (id < 0) {
-            return;
-        }
-        showToast("Handle //host/path/" + id);
-    }
-
-    @SchemeUrl("//host/path/wild/*")
-    public void handlePathWildCard() {
-        showToast("Handle //host/path/wild/*");
-    }
-
-    @SchemeUrl("/path")
-    public void handleWithoutHost() {
-        showToast("Handle /path");
-    }
-
-    @SchemeUrl("http://scheme-test.example.com/path")
-    public void handleHttpUrl() {
-        showToast("Handle http://scheme-test.example.com/path");
+    @SchemeUrl("//host/buz/{id}")
+    public void handlePathParam(@SchemePath("id") int id) {
+        showToast("Handle //host/buz/" + id);
     }
 }

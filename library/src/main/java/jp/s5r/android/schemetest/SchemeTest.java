@@ -32,11 +32,12 @@ public final class SchemeTest {
                         continue;
                     }
 
+                    List<SchemeParam> schemeParams = getSchemeParams(method);
                     SchemeUrl schemeUrl = (SchemeUrl) annotation;
-                    SchemeHandler handler = new SchemeHandler(schemeUrl.value(), uri, params);
+                    SchemeHandler handler = new SchemeHandler(schemeUrl.value(), schemeParams, uri, params);
                     if (handler.isMatch()) {
                         Log.d("SchemeTest", "invoke: " + schemeUrl.value());
-                        method.invoke(target, getParams(method, handler));
+                        method.invoke(target, buildParams(method, handler));
                     }
                 }
             } catch (IllegalArgumentException | SecurityException | ReflectiveOperationException e) {
@@ -68,7 +69,26 @@ public final class SchemeTest {
         return result;
     }
 
-    private static Object[] getParams(Method method, SchemeHandler handler) {
+    private static List<SchemeParam> getSchemeParams(Method method) {
+        ArrayList<SchemeParam> result = new ArrayList<>();
+
+        Annotation[][] paramAnnotations = method.getParameterAnnotations();
+        Class[] paramTypes = method.getParameterTypes();
+        if (paramTypes.length == 0) {
+            return result;
+        }
+        for (Annotation[] annotations : paramAnnotations) {
+            for (Annotation annotation : annotations) {
+                if (annotation.annotationType().equals(SchemeParam.class)) {
+                    result.add((SchemeParam) annotation);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static Object[] buildParams(Method method, SchemeHandler handler) {
         Annotation[][] paramAnnotations = method.getParameterAnnotations();
         Class[] paramTypes = method.getParameterTypes();
         if (paramTypes.length == 0) {

@@ -5,20 +5,25 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import java.util.HashMap;
+import java.util.List;
+
+import jp.s5r.android.schemetest.annotation.SchemeParam;
 
 public class SchemeHandler {
 
     private final String mPattern;
     private final Uri    mUri;
     private final Bundle mParams;
+    private final List<SchemeParam> mSchemeParams;
 
     private HashMap<String, String> mPatternParams;
     private String                  mPatternPath;
 
-    public SchemeHandler(String pattern, Uri uri, Bundle params) {
+    public SchemeHandler(String pattern, List<SchemeParam> schemeParams, Uri uri, Bundle params) {
         mPattern = pattern;
         mUri = uri;
         mParams = params;
+        mSchemeParams = schemeParams;
 
         mPatternParams = getPatternParams(pattern);
     }
@@ -43,6 +48,15 @@ public class SchemeHandler {
         return result;
     }
 
+    private boolean isIncludeSchemeParams(String key) {
+        for (SchemeParam param : mSchemeParams) {
+            if (key.equals(param.value())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isMatch() {
         String uriStr;
         if (mPattern.startsWith("//")) {
@@ -53,15 +67,16 @@ public class SchemeHandler {
             uriStr = mUri.getScheme() + "://" + mUri.getHost() + mUri.getPath();
         }
 
-        if (mUri.getQueryParameterNames().size() == 0) {
+        if (mSchemeParams.size() == 0) {
             return uriStr.equals(mPatternPath);
         } else {
+            int matchedParamCount = 0;
             for (String name : mUri.getQueryParameterNames()) {
-                if (!mPatternParams.containsValue(name)) {
-                    return false;
+                if (isIncludeSchemeParams(name)) {
+                    matchedParamCount++;
                 }
             }
-            return true;
+            return matchedParamCount == mPatternParams.size();
         }
     }
 
