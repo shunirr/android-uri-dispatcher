@@ -1,7 +1,5 @@
 # android-scheme-test
 
-作りかけ、以下のようなことが出来る予定。
-
 ```java
 @Override
 protected void onNewIntent(final Intent intent) {
@@ -11,50 +9,45 @@ protected void onNewIntent(final Intent intent) {
 ```
 
 ```java
-@SchemeUrl("schemetest://host")
-void handleSchemeHost() {
-    Log.d("Handle schemetest://host");
+@SchemeUrl("scheme-test://host")
+public void handleUrl() {
+    showToast("Handle scheme-test://host");
 }
 
 @SchemeUrl("//host")
-void handleHost() {
-    Log.d("Handle //host");
+public void handleHostWithoutSlash() {
+    showToast("Handle //host");
 }
 
 @SchemeUrl("//host/")
-void handleRootPath() {
-    Log.d("Handle //host/");
+public void handleHostWithSlash() {
+    showToast("Handle //host/");
 }
 
-@SchemeUrl("//host/path")
-void handlePath() {
-    Log.d("Handle //host/path");
+@SchemeUrl("//host/user-list")
+public void handleUserList() {
+    showToast("Handle //host/user-list");
 }
 
-@SchemeUrl("//host/path?query={query}")
-void handleStringQueryParam(@SchemeParam("query") String query) {
-    Log.d("Handle //host/path?query=string");
+@SchemeUrl("//host/search")
+public void handleSearchWithQuery(@SchemeParam("query") String query,
+                                  @SchemeParam("id") int id) {
+    showToast("Handle //host/search?query=" + query + "&id=" + id);
 }
 
-@SchemeUrl("//host/path?id={id}")
-void handleIntegerQueryParam(@SchemeParam("id") int id) {
-    Log.d("Handle //host/path?id=integer");
+@SchemeUrl("//host/users/{id}")
+public void handleUserWithId(@SchemePath("id") int id) {
+    showToast("Handle //host/users/" + id);
 }
 
-@SchemeUrl("//host/path?query={query}&id={id}")
-void handleMultiQueryParam(@SchemeParam("query") String query,
-                           @SchemeParam("id") int id) {
-    Log.d("Handle //host/path?query=query&id=integer");
+@SchemeUrl("//host/users/{id}/follower")
+public void handleFollowerWithUserId(@SchemePath("id") int id) {
+    showToast("Handle //host/users/" + id + "/follower");
 }
 
-@SchemeUrl("//host/path/{id}")
-void handlePathParam(@SchemeParam("id") int id) {
-    Log.d("Handle //host/path/{id}");
-}
-
-@SchemeUrl("//host/path/wild/*")
-void handlePathWildCard() {
-    Log.d("Handle //host/path/wild/*");
+@SchemeUrl("//host/users/*")
+public void handleUsersAll() {
+    showToast("Handle //host/users/*");
 }
 ```
 
