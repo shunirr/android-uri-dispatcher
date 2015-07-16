@@ -33,12 +33,8 @@ public final class SchemeTest {
                         continue;
                     }
 
-                    List<SchemeParam> schemeParams = getSchemeParams(method);
-                    List<SchemePath> schemePaths = getSchemePaths(method);
-
                     SchemeUrl schemeUrl = (SchemeUrl) annotation;
-                    SchemeHandler handler = new SchemeHandler(
-                            schemeUrl.value(), schemeParams, schemePaths, uri, params);
+                    SchemeHandler handler = new SchemeHandler(schemeUrl.value(), uri, params);
                     if (handler.isMatch()) {
                         Log.d("SchemeTest", "invoke: " + schemeUrl.value());
                         method.invoke(target, buildParams(method, handler));
@@ -67,44 +63,6 @@ public final class SchemeTest {
                 }
             } catch (IllegalArgumentException | SecurityException e) {
                 throw new RuntimeException(e);
-            }
-        }
-
-        return result;
-    }
-
-    private static List<SchemePath> getSchemePaths(Method method) {
-        ArrayList<SchemePath> result = new ArrayList<>();
-
-        Annotation[][] paramAnnotations = method.getParameterAnnotations();
-        Class[] paramTypes = method.getParameterTypes();
-        if (paramTypes.length == 0) {
-            return result;
-        }
-        for (Annotation[] annotations : paramAnnotations) {
-            for (Annotation annotation : annotations) {
-                if (annotation.annotationType().equals(SchemePath.class)) {
-                    result.add((SchemePath) annotation);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private static List<SchemeParam> getSchemeParams(Method method) {
-        ArrayList<SchemeParam> result = new ArrayList<>();
-
-        Annotation[][] paramAnnotations = method.getParameterAnnotations();
-        Class[] paramTypes = method.getParameterTypes();
-        if (paramTypes.length == 0) {
-            return result;
-        }
-        for (Annotation[] annotations : paramAnnotations) {
-            for (Annotation annotation : annotations) {
-                if (annotation.annotationType().equals(SchemeParam.class)) {
-                    result.add((SchemeParam) annotation);
-                }
             }
         }
 

@@ -63,4 +63,9 @@ public class MainActivity extends ActionBarActivity {
     public void handleFollowerWithUserId(@SchemePath("id") int id) {
         showToast("Handle //host/users/" + id + "/follower");
     }
+
+    @SchemeUrl("//host/users/*")
+    public void handleUsersAll() {
+        showToast("Handle //host/users/*");
+    }
 }
