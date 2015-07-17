@@ -1,12 +1,12 @@
 package jp.s5r.android.schemetest;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +17,14 @@ import jp.s5r.android.schemetest.annotation.SchemeUrl;
 public final class SchemeTest {
 
     public static void handle(Object target, Intent intent) {
-        handle(target, intent.getData(), intent.getExtras());
+        handle(target, URI.create(intent.getData().toString()), intent.getExtras());
     }
 
-    public static void handle(Object target, Uri uri) {
+    public static void handle(Object target, URI uri) {
         handle(target, uri, null);
     }
 
-    private static void handle(Object target, Uri uri, Bundle params) {
+    private static void handle(Object target, URI uri, Bundle params) {
         for (Method method : getMethodAssignedSchemeUrl(target)) {
             try {
                 Annotation[] annotations = method.getDeclaredAnnotations();

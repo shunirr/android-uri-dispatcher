@@ -8,4 +8,13 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.11'
+    testCompile "org.mockito:mockito-core:1.9.5"
 }
