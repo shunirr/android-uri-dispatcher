@@ -68,4 +68,9 @@ public class MainActivity extends ActionBarActivity {
     public void handleUsersAll() {
         showToast("Handle //host/users/*");
     }
+
+    @SchemeUrl("/users/1")
+    public void handleUser1() {
+        showToast("Handle /users/1");
+    }
 }
