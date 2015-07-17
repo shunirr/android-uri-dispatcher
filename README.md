@@ -1,51 +1,76 @@
-# android-scheme-test
+# UriDispatcher
+
+UriDispatcher is a library for Android.  Dispatching to matching method assigned by annotation.
+
+## How to use
+
+Calling to `UriDispatcher#dispatch` with uri string or intent instance.
 
 ```java
 @Override
 protected void onNewIntent(final Intent intent) {
     super.onNewIntent(intent);
-    SchemeTest.handle(this, intent);
+    UriDispatcher.dispatch(this, intent);
 }
 ```
 
+Called appropriate methods.
+
 ```java
-@SchemeUrl("scheme-test://host")
-public void handleUrl() {
+@MatchUri("scheme-test://host")
+public void handleUri() {
     showToast("Handle scheme-test://host");
 }
+```
 
-@SchemeUrl("//host")
+Scheme part is optional.
+
+```java
+@MatchUri("//host")
 public void handleHostWithoutSlash() {
     showToast("Handle //host");
 }
+```
 
-@SchemeUrl("//host/")
-public void handleHostWithSlash() {
-    showToast("Handle //host/");
+Host part is optional.
+
+```java
+
+@MatchUri("/path")
+public void handlePath() {
+    showToast("Handle /path");
 }
+```
 
-@SchemeUrl("//host/user-list")
-public void handleUserList() {
-    showToast("Handle //host/user-list");
-}
+You can get QueryStrings using a `QueryParam` annotation.
 
-@SchemeUrl("//host/search")
-public void handleSearchWithQuery(@SchemeParam("query") String query,
-                                  @SchemeParam("id") int id) {
+```java
+
+@MatchUri("//host/search")
+public void handleSearchWithQuery(@QueryParam("query") String query,
+                                  @QueryParam("id") int id) {
     showToast("Handle //host/search?query=" + query + "&id=" + id);
 }
+```
 
-@SchemeUrl("//host/users/{id}")
-public void handleUserWithId(@SchemePath("id") int id) {
+You can get any path using a `PathParam` annotation.
+
+```java
+@MatchUri("//host/users/{id}")
+public void handleUserWithId(@PathParam("id") int id) {
     showToast("Handle //host/users/" + id);
 }
 
-@SchemeUrl("//host/users/{id}/follower")
-public void handleFollowerWithUserId(@SchemePath("id") int id) {
+@MatchUri("//host/users/{id}/follower")
+public void handleFollowerWithUserId(@PathParam("id") int id) {
     showToast("Handle //host/users/" + id + "/follower");
 }
+```
 
-@SchemeUrl("//host/users/*")
+You can use wildcard.
+
+```java
+@MatchUri("//host/users/*")
 public void handleUsersAll() {
     showToast("Handle //host/users/*");
 }
