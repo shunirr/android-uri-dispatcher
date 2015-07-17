@@ -1,4 +1,4 @@
-package jp.s5r.android.schemetest;
+package jp.s5r.android.uridispatcher;
 
 import junit.framework.Assert;
 

@@ -1,14 +1,14 @@
-package jp.s5r.android.schemetest.sample;
+package jp.s5r.android.uridispatcher.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
-import jp.s5r.android.schemetest.SchemeTest;
-import jp.s5r.android.schemetest.annotation.SchemeParam;
-import jp.s5r.android.schemetest.annotation.SchemePath;
-import jp.s5r.android.schemetest.annotation.SchemeUrl;
+import jp.s5r.android.uridispatcher.UriDispatcher;
+import jp.s5r.android.uridispatcher.annotation.QueryParam;
+import jp.s5r.android.uridispatcher.annotation.PathParam;
+import jp.s5r.android.uridispatcher.annotation.MatchUri;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -21,55 +21,55 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onNewIntent(final Intent intent) {
         super.onNewIntent(intent);
-        SchemeTest.handle(this, intent);
+        UriDispatcher.dispatch(this, intent);
     }
 
     private void showToast(String str) {
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
-    @SchemeUrl("scheme-test://host")
-    public void handleUrl() {
+    @MatchUri("scheme-test://host")
+    public void handleUri() {
         showToast("Handle scheme-test://host");
     }
 
-    @SchemeUrl("//host")
+    @MatchUri("//host")
     public void handleHostWithoutSlash() {
         showToast("Handle //host");
     }
 
-    @SchemeUrl("//host/")
+    @MatchUri("//host/")
     public void handleHostWithSlash() {
         showToast("Handle //host/");
     }
 
-    @SchemeUrl("//host/user-list")
+    @MatchUri("//host/user-list")
     public void handleUserList() {
         showToast("Handle //host/user-list");
     }
 
-    @SchemeUrl("//host/search")
-    public void handleSearchWithQuery(@SchemeParam("query") String query,
-                                      @SchemeParam("id") int id) {
+    @MatchUri("//host/search")
+    public void handleSearchWithQuery(@QueryParam("query") String query,
+                                      @QueryParam("id") int id) {
         showToast("Handle //host/search?query=" + query + "&id=" + id);
     }
 
-    @SchemeUrl("//host/users/{id}")
-    public void handleUserWithId(@SchemePath("id") int id) {
+    @MatchUri("//host/users/{id}")
+    public void handleUserWithId(@PathParam("id") int id) {
         showToast("Handle //host/users/" + id);
     }
 
-    @SchemeUrl("//host/users/{id}/follower")
-    public void handleFollowerWithUserId(@SchemePath("id") int id) {
+    @MatchUri("//host/users/{id}/follower")
+    public void handleFollowerWithUserId(@PathParam("id") int id) {
         showToast("Handle //host/users/" + id + "/follower");
     }
 
-    @SchemeUrl("//host/users/*")
+    @MatchUri("//host/users/*")
     public void handleUsersAll() {
         showToast("Handle //host/users/*");
     }
 
-    @SchemeUrl("/users/1")
+    @MatchUri("/users/1")
     public void handleUser1() {
         showToast("Handle /users/1");
     }

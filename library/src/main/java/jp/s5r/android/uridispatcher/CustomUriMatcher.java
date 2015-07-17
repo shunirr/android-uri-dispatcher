@@ -1,4 +1,4 @@
-package jp.s5r.android.schemetest;
+package jp.s5r.android.uridispatcher;
 
 import android.os.Bundle;
 
@@ -6,7 +6,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SchemeHandler {
+public class CustomUriMatcher {
 
     private static final String ANY = "any";
 
@@ -18,11 +18,11 @@ public class SchemeHandler {
     private URI mPatternUri;
     private HashMap<String, String> mPathData = new HashMap<>();
 
-    public SchemeHandler(String pattern, URI uri) {
+    public CustomUriMatcher(String pattern, URI uri) {
         this(pattern, uri, null);
     }
 
-    public SchemeHandler(String pattern, URI uri, Bundle params) {
+    public CustomUriMatcher(String pattern, URI uri, Bundle params) {
         mUri = uri;
         mParams = params;
         // URI の validator が強力なため対処
