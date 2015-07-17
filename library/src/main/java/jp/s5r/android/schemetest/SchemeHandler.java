@@ -1,7 +1,6 @@
 package jp.s5r.android.schemetest;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -15,6 +14,7 @@ public class SchemeHandler {
     private final Bundle mParams;
     private final Map<String, String> mQueryStrings;
 
+    private boolean mIsParsed = false;
     private URI mPatternUri;
     private HashMap<String, String> mPathData = new HashMap<>();
 
@@ -61,6 +61,8 @@ public class SchemeHandler {
     }
 
     public boolean isMatch() {
+        mIsParsed = true;
+
         if (mPatternUri == null) {
             return false;
         }
@@ -97,6 +99,9 @@ public class SchemeHandler {
     }
 
     public String getParamString(final String key) {
+        if (!mIsParsed) {
+            isMatch();
+        }
         if (mParams != null && mParams.containsKey(key)) {
             Object o = mParams.get(key);
             if (o != null && o instanceof String) {
@@ -104,7 +109,7 @@ public class SchemeHandler {
             }
         } else {
             String value = mQueryStrings.get(key);
-            if (!TextUtils.isEmpty(value)) {
+            if (value != null && !"".equals(value)) {
                 return value;
             }
         }
@@ -112,6 +117,9 @@ public class SchemeHandler {
     }
 
     public Integer getParamInteger(final String key) {
+        if (!mIsParsed) {
+            isMatch();
+        }
         if (mParams != null && mParams.containsKey(key)) {
             Object o = mParams.get(key);
             if (o != null && o instanceof Integer) {
@@ -119,7 +127,7 @@ public class SchemeHandler {
             }
         } else {
             String value = mQueryStrings.get(key);
-            if (!TextUtils.isEmpty(value)) {
+            if (value != null && !"".equals(value)) {
                 try {
                     return Integer.valueOf(value);
                 } catch (NumberFormatException ignored) {
@@ -130,10 +138,16 @@ public class SchemeHandler {
     }
 
     public String getPathString(String key) {
+        if (!mIsParsed) {
+            isMatch();
+        }
         return mPathData.get(key);
     }
 
     public Integer getPathInteger(String key) {
+        if (!mIsParsed) {
+            isMatch();
+        }
         String value = mPathData.get(key);
         try {
             return Integer.valueOf(value);
